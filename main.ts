@@ -82,8 +82,17 @@ class Wikipage {
         if (!document) throw new Error('Error when parsing page.');
         const paragraphs = document.getElementsByTagName('p');
         let links: string[] = [];
+
+        // Get links from paragraphs
         paragraphs.forEach(par => {links = [...links, ...par.getElementsByTagName('a').map(elem => elem.getAttribute('href')).filter(link => link && link.startsWith('/wiki/')).map(link => link?.slice(6)) as string[]]})
-        return links;
+        
+        // Remove doubles
+        for (const link of links) {
+            if (links.filter(l => l===link).length >= 2) {
+                links[links.indexOf(link)] = '';
+            }
+        }
+        return links.filter(link => link);
     }
 }
 
@@ -178,7 +187,6 @@ export class Wikidart {
     }
 
     private async branch(root: Node, maxDepth: number): Promise<Node | null> {
-        // console.log(root.value)
         if (root.value == this.end) return root;
         if (this.options.maxDepth && (root.depth >= maxDepth)) return null;
         const page = new Wikipage(root.value);
