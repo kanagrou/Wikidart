@@ -45,4 +45,4 @@ deno run --allow-net --allow-read main.ts
 
 ## Notes
 
-This project is not optimized so finding paths with a depth to high will take a very long time.
+This project is not optimized so finding paths with a depth too high will take a very long time.
